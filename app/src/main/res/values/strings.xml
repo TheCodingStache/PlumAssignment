@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PlumAssignment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="generic_error">You are currently offline</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">💪 Hire to Squad</string>
+    <string name="delete">🔥 Fire from Squad</string>
+    <string name="my_squad">My Squad</string>
+
+</resources>
