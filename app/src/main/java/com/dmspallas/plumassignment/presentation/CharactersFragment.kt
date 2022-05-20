@@ -15,6 +15,12 @@ import com.dmspallas.plumassignment.data.remote.db.CharacterDatabase
 import com.dmspallas.plumassignment.data.remote.db.CharacterEntity
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
 import com.dmspallas.plumassignment.domain.model.CharacterModel
+import com.dmspallas.plumassignment.presentation.character.CharacterViewAdapter
+import com.dmspallas.plumassignment.presentation.character.CharacterViewModel
+import com.dmspallas.plumassignment.presentation.character.CharacterViewModelFactory
+import com.dmspallas.plumassignment.presentation.squad.SquadViewAdapter
+import com.dmspallas.plumassignment.presentation.squad.SquadViewModel
+import com.dmspallas.plumassignment.presentation.squad.SquadViewModelFactory
 import com.dmspallas.plumassignment.util.PreferencesServiceImpl
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder

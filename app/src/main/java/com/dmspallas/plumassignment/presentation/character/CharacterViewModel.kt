@@ -1,4 +1,4 @@
-package com.dmspallas.plumassignment.presentation
+package com.dmspallas.plumassignment.presentation.character
 
 import androidx.databinding.Observable
 import androidx.lifecycle.*

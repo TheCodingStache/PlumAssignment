@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.dmspallas.plumassignment.presentation.SquadViewModel" />
+            type="com.dmspallas.plumassignment.presentation.squad.SquadViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -72,24 +72,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="10dp"
-                        android:onClick="@{()->viewModel.saveOrCheck()}"
+                        android:visibility="@{viewModel.hireButtonVisibility}"
                         android:text="@{viewModel.saveButtonText}"
                         android:textAllCaps="false"
-                        android:textSize="18sp"
-                        android:visibility="@{viewModel.hireButtonVisibility}" />
-
-                    <Button
-                        android:id="@+id/fire"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:backgroundTint="@color/orange"
-                        android:onClick="@{()->viewModel.deleteButton()}"
-                        android:text="@{viewModel.deleteButtonText}"
-                        android:textAllCaps="false"
-                        android:textSize="18sp"
-                        android:visibility="@{viewModel.fireButtonVisibility}" />
+                        android:textSize="18sp" />
 
                 </FrameLayout>
 
