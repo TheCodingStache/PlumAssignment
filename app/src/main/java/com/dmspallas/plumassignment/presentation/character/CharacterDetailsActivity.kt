@@ -17,14 +17,13 @@ import com.dmspallas.plumassignment.data.remote.db.CharacterDatabase
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
 import com.dmspallas.plumassignment.databinding.ActivityHeroDetailsBinding
 import com.dmspallas.plumassignment.presentation.MainActivity
-import com.dmspallas.plumassignment.presentation.squad.SquadViewModel
-import com.dmspallas.plumassignment.presentation.squad.SquadViewModelFactory
-import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.dmspallas.plumassignment.presentation.squad.HireSquadViewModel
+import com.dmspallas.plumassignment.presentation.squad.HireSquadViewModelFactory
 import javax.inject.Inject
 
 class CharacterDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHeroDetailsBinding
-    private lateinit var squadViewModel: SquadViewModel
+    private lateinit var hireSquadViewModel: HireSquadViewModel
     private lateinit var hireButton: Button
     private lateinit var heroTextView: TextView
     private lateinit var characterImageView: ImageView
@@ -33,7 +32,7 @@ class CharacterDetailsActivity : AppCompatActivity() {
     lateinit var repository: CharacterRepository
 
     @Inject
-    lateinit var squadViewModelFactory: SquadViewModelFactory
+    lateinit var hireSquadViewModelFactory: HireSquadViewModelFactory
 
 
     override fun onBackPressed() {
@@ -60,14 +59,14 @@ class CharacterDetailsActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hero_details)
         val dao = CharacterDatabase.getInstance(application).dao
         repository = CharacterRepository(dao)
-        squadViewModelFactory = SquadViewModelFactory(this, repository, intent.extras)
-        squadViewModel = ViewModelProvider(this, squadViewModelFactory)[SquadViewModel::class.java]
-        binding.viewModel = squadViewModel
+        hireSquadViewModelFactory = HireSquadViewModelFactory(this, repository, intent.extras)
+        hireSquadViewModel = ViewModelProvider(this, hireSquadViewModelFactory)[HireSquadViewModel::class.java]
+        binding.viewModel = hireSquadViewModel
         binding.lifecycleOwner = this
     }
 
     private fun displayCharacterList() {
-        squadViewModel.heroes.observe(this) { characters ->
+        hireSquadViewModel.heroes.observe(this) { characters ->
             Log.i("TAG", characters.toString())
         }
     }
@@ -83,12 +82,12 @@ class CharacterDetailsActivity : AppCompatActivity() {
 
     private fun onClick() {
         hireButton.setOnClickListener {
-            squadViewModel.existsByName(heroTextView.text.toString()).observe(this) { result ->
+            hireSquadViewModel.existsByName(heroTextView.text.toString()).observe(this) { result ->
                 if (!result) {
-                    squadViewModel.saveButton()
+                    hireSquadViewModel.saveButton()
                     Toast.makeText(
                         this,
-                        "${heroTextView.text} hired successfully!",
+                        heroTextView.text.toString() + " " + resources.getString(R.string.toast_hired_successfully) ,
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -98,7 +97,7 @@ class CharacterDetailsActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this,
-                        "${heroTextView.text} already belongs to squad!",
+                        heroTextView.text.toString() + " " + resources.getString(R.string.toast_belongs_to_squad),
                         Toast.LENGTH_SHORT
                     )
                         .show()

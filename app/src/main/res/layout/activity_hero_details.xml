@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.dmspallas.plumassignment.presentation.squad.SquadViewModel" />
+            type="com.dmspallas.plumassignment.presentation.squad.HireSquadViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

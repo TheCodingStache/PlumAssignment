@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.dmspallas.plumassignment.domain.model.repository.CharacterRepository
 import javax.inject.Inject
 
-class HireCharacterViewModelFactory @Inject constructor(
+class CharacterViewModelFactory @Inject constructor(
     private val repository: CharacterRepository,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HireCharacterViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(CharacterViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return HireCharacterViewModel(repository) as T
+            return CharacterViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

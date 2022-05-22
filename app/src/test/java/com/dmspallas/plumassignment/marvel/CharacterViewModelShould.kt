@@ -4,7 +4,7 @@ import com.dmspallas.plumassignment.BaseUnitTest
 import com.dmspallas.plumassignment.domain.model.Character
 import com.dmspallas.plumassignment.domain.model.repository.CharacterRepository
 import com.dmspallas.plumassignment.getValueForTest
-import com.dmspallas.plumassignment.presentation.character.HireCharacterViewModel
+import com.dmspallas.plumassignment.presentation.character.CharacterViewModel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class HireCharacterViewModelShould : BaseUnitTest() {
+class CharacterViewModelShould : BaseUnitTest() {
     private val repository: CharacterRepository = mock()
     private val characters = mock<List<Character>>()
     private val expected = Result.success(characters)
@@ -47,12 +47,12 @@ class HireCharacterViewModelShould : BaseUnitTest() {
                 }
             )
         }
-        val viewModel = HireCharacterViewModel(repository)
+        val viewModel = CharacterViewModel(repository)
         assertEquals(exception, viewModel.characters.getValueForTest()!!.exceptionOrNull())
     }
 
 
-    private fun mockSuccessfulCase(): HireCharacterViewModel {
+    private fun mockSuccessfulCase(): CharacterViewModel {
         runBlocking {
             whenever(repository.getCharacters()).thenReturn(
                 flow {
@@ -60,6 +60,6 @@ class HireCharacterViewModelShould : BaseUnitTest() {
                 }
             )
         }
-        return HireCharacterViewModel(repository)
+        return CharacterViewModel(repository)
     }
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HireCharacterViewModel @Inject constructor(
+class CharacterViewModel @Inject constructor(
     private val repository: CharacterRepository,
 ) : ViewModel() {
     val loader = MutableLiveData<Boolean>()

@@ -8,7 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
 import javax.inject.Inject
 
-class SquadViewModelFactory @Inject constructor(
+class HireSquadViewModelFactory @Inject constructor(
     owner: SavedStateRegistryOwner,
     private val repository: CharacterRepository,
     defaultArgs: Bundle? = null,
@@ -16,9 +16,9 @@ class SquadViewModelFactory @Inject constructor(
     override fun <T : ViewModel> create(
         key: String, modelClass: Class<T>, handle: SavedStateHandle
     ): T {
-        if (modelClass.isAssignableFrom(SquadViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(HireSquadViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return SquadViewModel(repository, handle) as T
+            return HireSquadViewModel(repository, handle) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

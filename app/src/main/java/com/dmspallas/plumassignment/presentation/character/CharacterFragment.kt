@@ -16,8 +16,8 @@ import com.dmspallas.plumassignment.data.remote.db.CharacterEntity
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
 import com.dmspallas.plumassignment.domain.model.Character
 import com.dmspallas.plumassignment.presentation.squad.SquadViewAdapter
-import com.dmspallas.plumassignment.presentation.squad.SquadViewModel
-import com.dmspallas.plumassignment.presentation.squad.SquadViewModelFactory
+import com.dmspallas.plumassignment.presentation.squad.HireSquadViewModel
+import com.dmspallas.plumassignment.presentation.squad.HireSquadViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,13 +27,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharacterFragment : Fragment() {
-    private lateinit var viewModel: HireCharacterViewModel
-    private lateinit var squadViewModel: SquadViewModel
+    private lateinit var viewModel: CharacterViewModel
+    private lateinit var hireSquadViewModel: HireSquadViewModel
 
     @Inject
-    lateinit var viewModelFactory: HireCharacterViewModelFactory
+    lateinit var viewModelFactory: CharacterViewModelFactory
 
-    lateinit var squadViewModelFactory: SquadViewModelFactory
+    lateinit var hireSquadViewModelFactory: HireSquadViewModelFactory
 
     @Inject
     lateinit var repository: CharacterRepository
@@ -88,7 +88,7 @@ class CharacterFragment : Fragment() {
     }
 
     private fun displayCharacterList() {
-        squadViewModel.heroes.observe(this as LifecycleOwner) {
+        hireSquadViewModel.heroes.observe(this as LifecycleOwner) {
             Log.i("haha", it.toString())
             renderDataHorizontal(it)
         }
@@ -104,9 +104,9 @@ class CharacterFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        viewModel = ViewModelProvider(this, viewModelFactory)[HireCharacterViewModel::class.java]
-        squadViewModelFactory = SquadViewModelFactory(this, repository)
-        squadViewModel = ViewModelProvider(this, squadViewModelFactory)[SquadViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[CharacterViewModel::class.java]
+        hireSquadViewModelFactory = HireSquadViewModelFactory(this, repository)
+        hireSquadViewModel = ViewModelProvider(this, hireSquadViewModelFactory)[HireSquadViewModel::class.java]
 
     }
 

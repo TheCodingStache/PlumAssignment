@@ -9,6 +9,8 @@
     <string name="my_squad">My Squad</string>
     <string name="yes">Yes</string>
     <string name="dialog_response">fired from squad</string>
+    <string name="toast_hired_successfully">hired successfully!</string>
+    <string name="toast_belongs_to_squad">already belongs to squad</string>
     <string name="no">No</string>
     <string name="dialogTitle">Deleting Hero From Squad</string>
     <string name="dialogMessage">Are you sure that you want to fire him?</string>

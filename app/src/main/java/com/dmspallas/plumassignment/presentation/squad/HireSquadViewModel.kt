@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SquadViewModel @Inject constructor(
+class HireSquadViewModel @Inject constructor(
     private val repository: CharacterRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(),
@@ -48,7 +48,7 @@ class SquadViewModel @Inject constructor(
         insert(CharacterEntity(0, heroName!!, heroDescription!!, heroImage!!))
     }
 
-    fun insert(characterEntity: CharacterEntity) = viewModelScope.launch(Dispatchers.IO) {
+    private fun insert(characterEntity: CharacterEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(characterEntity)
     }
 
