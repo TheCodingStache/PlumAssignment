@@ -4,43 +4,36 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.dmspallas.plumassignment.GlideApp
 import com.dmspallas.plumassignment.R
 import com.dmspallas.plumassignment.data.remote.db.CharacterDatabase
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
 import com.dmspallas.plumassignment.databinding.ActivityHeroDetailsBinding
 import com.dmspallas.plumassignment.presentation.MainActivity
-import com.dmspallas.plumassignment.presentation.squad.SquadViewAdapter
 import com.dmspallas.plumassignment.presentation.squad.SquadViewModel
 import com.dmspallas.plumassignment.presentation.squad.SquadViewModelFactory
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HeroDetailsActivity : AppCompatActivity() {
+class CharacterDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHeroDetailsBinding
     private lateinit var squadViewModel: SquadViewModel
-    lateinit var squadAdapter: SquadViewAdapter
+    private lateinit var hireButton: Button
+    private lateinit var heroTextView: TextView
+    private lateinit var characterImageView: ImageView
 
     @Inject
     lateinit var repository: CharacterRepository
 
     @Inject
     lateinit var squadViewModelFactory: SquadViewModelFactory
-
-    @Inject
-    lateinit var impl: PreferencesServiceImpl
 
 
     override fun onBackPressed() {
@@ -52,35 +45,45 @@ class HeroDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setUpViewModel()
+        heroTextView = findViewById(R.id.name)
+        characterImageView = findViewById(R.id.hero_image)
+        hireButton = findViewById(R.id.hire)
+        val image = intent.getStringExtra("image")
+        GlideApp.with(this).load(image).into(characterImageView)
+        onClick()
+        decorChanges()
+        displayCharacterList()
+    }
+
+    private fun setUpViewModel() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hero_details)
         val dao = CharacterDatabase.getInstance(application).dao
         repository = CharacterRepository(dao)
-        impl = PreferencesServiceImpl(this)
-        squadViewModelFactory = SquadViewModelFactory(this, repository, impl, intent.extras)
+        squadViewModelFactory = SquadViewModelFactory(this, repository, intent.extras)
         squadViewModel = ViewModelProvider(this, squadViewModelFactory)[SquadViewModel::class.java]
         binding.viewModel = squadViewModel
         binding.lifecycleOwner = this
+    }
 
-        val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapse)
-        val descriptionTextView = findViewById<TextView>(R.id.description)
-        val heroTextView = findViewById<TextView>(R.id.name)
-        val characterImageView = findViewById<ImageView>(R.id.hero_image)
-        val hireButton = findViewById<Button>(R.id.hire)
-        val heroName = intent.getStringExtra("name");
-        val description = intent.getStringExtra("description")
-        val image = intent.getStringExtra("image")
-        if (description == "") {
-            descriptionTextView.text = "No available information for this character"
-        } else {
-            descriptionTextView.text = description
+    private fun displayCharacterList() {
+        squadViewModel.heroes.observe(this) { characters ->
+            Log.i("TAG", characters.toString())
         }
+    }
 
-        heroTextView.text = heroName
-        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapseAppBar);
-        GlideApp.with(this).load(image).into(characterImageView)
-        displayCharacterList()
+    private fun decorChanges() {
+        supportActionBar?.hide()
+        window.statusBarColor = R.color.transparent
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
+
+    private fun onClick() {
         hireButton.setOnClickListener {
-            squadViewModel.existsByName(heroName.toString()).observe(this) { result ->
+            squadViewModel.existsByName(heroTextView.text.toString()).observe(this) { result ->
                 if (!result) {
                     squadViewModel.saveButton()
                     Toast.makeText(
@@ -103,10 +106,4 @@ class HeroDetailsActivity : AppCompatActivity() {
             }
         }
     }
-
-private fun displayCharacterList() {
-    squadViewModel.heroes.observe(this) { characters ->
-        Log.i("TAG", characters.toString())
-    }
-}
 }

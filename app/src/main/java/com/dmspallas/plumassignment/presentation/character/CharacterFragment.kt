@@ -1,4 +1,4 @@
-package com.dmspallas.plumassignment.presentation
+package com.dmspallas.plumassignment.presentation.character
 
 import android.os.Bundle
 import android.util.Log
@@ -14,14 +14,10 @@ import com.dmspallas.plumassignment.R
 import com.dmspallas.plumassignment.data.remote.db.CharacterDatabase
 import com.dmspallas.plumassignment.data.remote.db.CharacterEntity
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
-import com.dmspallas.plumassignment.domain.model.CharacterModel
-import com.dmspallas.plumassignment.presentation.character.CharacterViewAdapter
-import com.dmspallas.plumassignment.presentation.character.CharacterViewModel
-import com.dmspallas.plumassignment.presentation.character.CharacterViewModelFactory
+import com.dmspallas.plumassignment.domain.model.Character
 import com.dmspallas.plumassignment.presentation.squad.SquadViewAdapter
 import com.dmspallas.plumassignment.presentation.squad.SquadViewModel
 import com.dmspallas.plumassignment.presentation.squad.SquadViewModelFactory
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,20 +26,18 @@ import kotlinx.android.synthetic.main.fragment_characters.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CharactersFragment : Fragment() {
-    private lateinit var viewModel: CharacterViewModel
+class CharacterFragment : Fragment() {
+    private lateinit var viewModel: HireCharacterViewModel
     private lateinit var squadViewModel: SquadViewModel
 
     @Inject
-    lateinit var viewModelFactory: CharacterViewModelFactory
+    lateinit var viewModelFactory: HireCharacterViewModelFactory
 
     lateinit var squadViewModelFactory: SquadViewModelFactory
 
     @Inject
     lateinit var repository: CharacterRepository
 
-    @Inject
-    lateinit var impl: PreferencesServiceImpl
     lateinit var adapter: CharacterViewAdapter
     lateinit var squadAdapter: SquadViewAdapter
     override fun onCreateView(
@@ -63,7 +57,6 @@ class CharactersFragment : Fragment() {
             )
         )
         val dao = activity?.let { CharacterDatabase.getInstance(it).dao }
-        impl = PreferencesServiceImpl(context!!)
         repository = CharacterRepository(dao!!)
         squadAdapter = SquadViewAdapter(requireContext())
         adapter = CharacterViewAdapter(requireContext())
@@ -111,13 +104,13 @@ class CharactersFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        viewModel = ViewModelProvider(this, viewModelFactory)[CharacterViewModel::class.java]
-        squadViewModelFactory = SquadViewModelFactory(this, repository, impl)
+        viewModel = ViewModelProvider(this, viewModelFactory)[HireCharacterViewModel::class.java]
+        squadViewModelFactory = SquadViewModelFactory(this, repository)
         squadViewModel = ViewModelProvider(this, squadViewModelFactory)[SquadViewModel::class.java]
 
     }
 
-    private fun renderData(characters: List<CharacterModel>) {
+    private fun renderData(characters: List<Character>) {
         adapter.addData(characters)
     }
 
@@ -135,6 +128,6 @@ class CharactersFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() =
-            CharactersFragment().apply { }
+            CharacterFragment().apply { }
     }
 }

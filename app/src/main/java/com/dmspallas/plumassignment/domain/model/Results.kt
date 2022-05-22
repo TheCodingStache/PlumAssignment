@@ -2,7 +2,7 @@ package com.dmspallas.plumassignment.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-class ResultsModel(
+class Results(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")
@@ -12,8 +12,8 @@ class ResultsModel(
     @SerializedName("thumbnail")
     val thumbnail: Thumbnail
 ) {
-    fun toCharacter(): CharacterModel {
-        return CharacterModel(
+    fun toCharacter(): Character {
+        return Character(
             id = id,
             name = name,
             description = description,

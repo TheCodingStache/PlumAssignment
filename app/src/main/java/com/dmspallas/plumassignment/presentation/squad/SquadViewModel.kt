@@ -6,11 +6,9 @@ import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.*
-import com.dmspallas.plumassignment.util.ButtonState
 import com.dmspallas.plumassignment.R
 import com.dmspallas.plumassignment.data.remote.db.CharacterEntity
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +18,6 @@ import javax.inject.Inject
 class SquadViewModel @Inject constructor(
     private val repository: CharacterRepository,
     savedStateHandle: SavedStateHandle,
-    private val impl: PreferencesServiceImpl
 ) : ViewModel(),
     Observable {
     private val heroName = savedStateHandle.get<String>("name")
@@ -51,7 +48,7 @@ class SquadViewModel @Inject constructor(
         insert(CharacterEntity(0, heroName!!, heroDescription!!, heroImage!!))
     }
 
-    private fun insert(characterEntity: CharacterEntity) = viewModelScope.launch(Dispatchers.IO) {
+    fun insert(characterEntity: CharacterEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(characterEntity)
     }
 

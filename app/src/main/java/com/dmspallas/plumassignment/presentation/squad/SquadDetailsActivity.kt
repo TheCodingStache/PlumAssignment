@@ -7,6 +7,7 @@ import com.dmspallas.plumassignment.R
 import android.content.Intent
 
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,24 +21,21 @@ import com.dmspallas.plumassignment.data.remote.db.CharacterDatabase
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
 import com.dmspallas.plumassignment.databinding.ActivitySquadDetailsBinding
 import com.dmspallas.plumassignment.presentation.MainActivity
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import javax.inject.Inject
 
 
 class SquadDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySquadDetailsBinding
     private lateinit var fireSquadViewModel: FireSquadViewModel
-    lateinit var squadAdapter: SquadViewAdapter
+    private lateinit var fireButton: Button
+    private lateinit var heroTextView: TextView
+    private lateinit var characterImageView: ImageView
 
     @Inject
     lateinit var repository: CharacterRepository
 
     @Inject
     lateinit var fireSquadViewModelFactory: FireSquadViewModelFactory
-
-    @Inject
-    lateinit var impl: PreferencesServiceImpl
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -48,59 +46,66 @@ class SquadDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_squad_details)
+        setUpViewModel()
+        heroTextView = findViewById(R.id.name)
+        characterImageView = findViewById(R.id.hero_image)
+        fireButton = findViewById(R.id.fire)
+        val image = intent.getStringExtra("image")
+        GlideApp.with(this).load(image).into(characterImageView)
+        onClick()
+        decorChanges()
+        displayCharacterList()
 
+    }
+
+    private fun setUpViewModel() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_squad_details)
         val dao = CharacterDatabase.getInstance(application).dao
         repository = CharacterRepository(dao)
-        impl = PreferencesServiceImpl(this)
-        fireSquadViewModelFactory = FireSquadViewModelFactory(this, repository, impl, intent.extras)
+        fireSquadViewModelFactory = FireSquadViewModelFactory(this, repository, intent.extras)
         fireSquadViewModel =
             ViewModelProvider(this, fireSquadViewModelFactory)[FireSquadViewModel::class.java]
         binding.viewModel = fireSquadViewModel
         binding.lifecycleOwner = this
-
-        val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapse)
-        val descriptionTextView = findViewById<TextView>(R.id.description)
-        val heroTextView = findViewById<TextView>(R.id.name)
-        val characterImageView = findViewById<ImageView>(R.id.hero_image)
-        val fireButton = findViewById<Button>(R.id.fire)
-        val heroName = intent.getStringExtra("name");
-        val description = intent.getStringExtra("description")
-        val image = intent.getStringExtra("image")
-        if (description == "") {
-            descriptionTextView.text = "No available information for this character"
-        } else {
-            descriptionTextView.text = description
-        }
-
-        heroTextView.text = heroName
-        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapseAppBar);
-        GlideApp.with(this).load(image).into(characterImageView)
-        displayCharacterList()
-        fireButton.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(R.string.dialogTitle)
-            builder.setMessage(R.string.dialogMessage)
-            builder.setIcon(android.R.drawable.ic_dialog_alert)
-            builder.setPositiveButton("Yes") { dialogInterface, which ->
-                fireSquadViewModel.deleteButton()
-                Toast.makeText(this, "${heroTextView.text} fired from squad", Toast.LENGTH_SHORT)
-                    .show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            builder.setNegativeButton("No") { dialogInterface, which ->
-            }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
-        }
     }
 
     private fun displayCharacterList() {
         fireSquadViewModel.heroes.observe(this) { characters ->
             Log.i("TAG", characters.toString())
+        }
+    }
+
+    private fun decorChanges() {
+        supportActionBar?.hide()
+        window.statusBarColor = R.color.transparent
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
+
+    private fun onClick() {
+        fireButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(R.string.dialogTitle)
+            builder.setMessage(R.string.dialogMessage)
+            builder.setPositiveButton(R.string.yes) { _, _ ->
+                fireSquadViewModel.deleteButton()
+                Toast.makeText(
+                    this,
+                    heroTextView.text.toString() + " " + resources.getString(R.string.dialog_response),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            builder.setNegativeButton(R.string.no) { _, _ ->
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
         }
     }
 }

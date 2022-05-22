@@ -1,15 +1,10 @@
 package com.dmspallas.plumassignment.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.dmspallas.plumassignment.data.remote.repository.CharacterService
+import com.dmspallas.plumassignment.data.remote.CharacterService
 import com.dmspallas.plumassignment.data.remote.MarvelAPI
 import com.dmspallas.plumassignment.data.remote.db.CharacterDatabase
-import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
-import com.google.gson.Gson
 import com.jakewharton.espresso.OkHttp3IdlingResource
 import dagger.Module
 import dagger.Provides
@@ -59,7 +54,4 @@ object MarvelModule {
     @Singleton
     fun provideDao(db: CharacterDatabase) = db.dao
 
-    @Provides
-    @Singleton
-    fun provideDataStoreRepository(@ApplicationContext context: Context) = PreferencesServiceImpl(context)
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PlumAssignment</string>
+    <string name="app_name">Superhero Squad Maker</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="generic_error">You are currently offline</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -7,6 +7,9 @@
     <string name="already_in_squad">Hero is already in squad</string>
     <string name="delete">🔥 Fire from Squad</string>
     <string name="my_squad">My Squad</string>
+    <string name="yes">Yes</string>
+    <string name="dialog_response">fired from squad</string>
+    <string name="no">No</string>
     <string name="dialogTitle">Deleting Hero From Squad</string>
     <string name="dialogMessage">Are you sure that you want to fire him?</string>
 </resources>

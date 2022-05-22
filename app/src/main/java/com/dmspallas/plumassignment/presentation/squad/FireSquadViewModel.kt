@@ -7,8 +7,6 @@ import androidx.lifecycle.*
 import com.dmspallas.plumassignment.R
 import com.dmspallas.plumassignment.data.remote.db.CharacterEntity
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
-import com.dmspallas.plumassignment.util.ButtonState
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +16,6 @@ import javax.inject.Inject
 class FireSquadViewModel @Inject constructor(
     private val repository: CharacterRepository,
     savedStateHandle: SavedStateHandle,
-    private val impl: PreferencesServiceImpl
 ) : ViewModel(),
     Observable {
 

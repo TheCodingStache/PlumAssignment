@@ -6,13 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.dmspallas.plumassignment.data.remote.db.CharacterRepository
-import com.dmspallas.plumassignment.util.PreferencesServiceImpl
 import javax.inject.Inject
 
 class SquadViewModelFactory @Inject constructor(
     owner: SavedStateRegistryOwner,
     private val repository: CharacterRepository,
-    private val impl: PreferencesServiceImpl,
     defaultArgs: Bundle? = null,
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
     override fun <T : ViewModel> create(
@@ -20,7 +18,7 @@ class SquadViewModelFactory @Inject constructor(
     ): T {
         if (modelClass.isAssignableFrom(SquadViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return SquadViewModel(repository, handle, impl) as T
+            return SquadViewModel(repository, handle) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

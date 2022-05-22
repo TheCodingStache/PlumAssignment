@@ -12,11 +12,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dmspallas.plumassignment.GlideApp
 import com.dmspallas.plumassignment.R
-import com.dmspallas.plumassignment.domain.model.CharacterModel
+import com.dmspallas.plumassignment.domain.model.Character
 
 class CharacterViewAdapter(private val context: Context) :
     RecyclerView.Adapter<CharacterViewAdapter.DataViewHolder>() {
-    private var charactersList: List<CharacterModel> = ArrayList()
+    private var charactersList: List<Character> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
@@ -35,7 +35,7 @@ class CharacterViewAdapter(private val context: Context) :
             ).into(holder.thumbnail)
         }
         holder.characterLayout.setOnClickListener {
-            val intent = Intent(context, HeroDetailsActivity::class.java)
+            val intent = Intent(context, CharacterDetailsActivity::class.java)
             intent.putExtra("name", currentItem.name)
             intent.putExtra("description", currentItem.description)
             intent.putExtra(
@@ -57,7 +57,7 @@ class CharacterViewAdapter(private val context: Context) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addData(list: List<CharacterModel>) {
+    fun addData(list: List<Character>) {
         charactersList = list
         notifyDataSetChanged()
     }

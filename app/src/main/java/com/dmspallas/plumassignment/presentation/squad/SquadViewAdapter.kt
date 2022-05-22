@@ -34,8 +34,8 @@ class SquadViewAdapter(private val context: Context) :
             intent.putExtra("name", currentItem.name)
             intent.putExtra("description", currentItem.description)
             intent.putExtra("image", currentItem.image)
-            context.startActivity(intent)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
         }
     }
 
