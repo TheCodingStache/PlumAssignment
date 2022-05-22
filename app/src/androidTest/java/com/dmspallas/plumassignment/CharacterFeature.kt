@@ -39,7 +39,7 @@ class CharacterFeature : BaseUITest() {
     }
 
     @Test
-    fun displayLoaderWhileFetchingSports() {
+    fun displayLoaderWhileFetchingCharacters() {
         IdlingRegistry.getInstance().unregister(idlingResource)
         assertDisplayed(R.id.loader)
     }
